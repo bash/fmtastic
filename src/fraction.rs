@@ -78,14 +78,13 @@ macro_rules! impl_display {
                         }
                     )?
 
-                    match (!f.alternate()).then(|| find_single_character_fraction(numerator, denominator)).flatten() {
-                        Some(frac) => f.write_char(frac),
-                        None => {
-                            write!(f, "{}", Superscript(numerator))?;
-                            const FRACTION_SLASH: char = '\u{2044}';
-                            f.write_char(FRACTION_SLASH)?;
-                            write!(f, "{}", Subscript(denominator))
-                        }
+                    if let Some(frac) = (!f.alternate()).then(|| find_single_character_fraction(numerator, denominator)).flatten() {
+                        f.write_char(frac)
+                    } else {
+                        write!(f, "{}", Superscript(numerator))?;
+                        const FRACTION_SLASH: char = '\u{2044}';
+                        f.write_char(FRACTION_SLASH)?;
+                        write!(f, "{}", Subscript(denominator))
                     }
                 }
             }
