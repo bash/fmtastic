@@ -49,6 +49,15 @@ impl<T> VulgarFraction<T> {
     }
 }
 
+impl<T> From<(T, T)> for VulgarFraction<T> {
+    fn from((numerator, denominator): (T, T)) -> Self {
+        VulgarFraction {
+            numerator,
+            denominator,
+        }
+    }
+}
+
 macro_rules! impl_from {
     ($($t:ident),+) => {
         $(
