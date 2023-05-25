@@ -5,7 +5,7 @@ use std::fmt::{self, Write};
 ///
 /// [`Display`][`std::fmt::Display`] is implemented for all common number types.
 ///
-/// ## Flags
+/// ## Formatting Flags
 /// ### Alternate `#`
 /// By default [single character fractions] are used when possible.
 /// This can be disabled by using the alternate flag (`#`).

@@ -5,7 +5,7 @@ use std::iter;
 ///
 /// [`Display`][`std::fmt::Display`] is implemented for all common number types.
 ///
-/// ## Flags
+/// ## Formatting Flags
 /// ### Sign: `+`
 /// Use the `+` flag to always include the + sign for positive numbers.
 ///
@@ -24,7 +24,7 @@ pub struct Superscript<T>(pub T);
 ///
 /// [`Display`][`std::fmt::Display`] is implemented for all common number types.
 ///
-/// ## Flags
+/// ## Formatting Flags
 /// ### Sign: `+`
 /// Use the `+` flag to always include the + sign for positive numbers.
 ///
