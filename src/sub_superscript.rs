@@ -107,40 +107,58 @@ mod tests {
     use super::*;
 
     #[test]
-    fn formats_superscript() {
-        assert_eq!("⁰", format!("{}", Superscript(0)));
-        assert_eq!("⁺⁰", format!("{:+}", Superscript(0)));
-        assert_eq!("¹", format!("{}", Superscript(1)));
-        assert_eq!("²", format!("{}", Superscript(2)));
-        assert_eq!("³", format!("{}", Superscript(3)));
-        assert_eq!("⁴", format!("{}", Superscript(4)));
-        assert_eq!("⁵", format!("{}", Superscript(5)));
-        assert_eq!("⁶", format!("{}", Superscript(6)));
-        assert_eq!("⁷", format!("{}", Superscript(7)));
-        assert_eq!("⁸", format!("{}", Superscript(8)));
-        assert_eq!("⁹", format!("{}", Superscript(9)));
-        assert_eq!("¹⁰", format!("{}", Superscript(10)));
-        assert_eq!("¹²³⁴⁵⁶⁷⁸⁹⁰", format!("{}", Superscript(1234567890)));
-        assert_eq!("⁺¹²³⁴⁵⁶⁷⁸⁹⁰", format!("{:+}", Superscript(1234567890)));
-        assert_eq!("⁻¹²³⁴⁵⁶⁷⁸⁹⁰", format!("{:}", Superscript(-1234567890)));
+    fn formats_as_superscript() {
+        for (expected, input) in [
+            ("⁰", 0),
+            ("¹", 1),
+            ("²", 2),
+            ("³", 3),
+            ("⁴", 4),
+            ("⁵", 5),
+            ("⁶", 6),
+            ("⁷", 7),
+            ("⁸", 8),
+            ("⁹", 9),
+            ("¹⁰", 10),
+            ("¹²³⁴⁵⁶⁷⁸⁹⁰", 1234567890),
+            ("⁻¹²³⁴⁵⁶⁷⁸⁹⁰", -1234567890),
+        ] {
+            assert_eq!(expected, Superscript(input).to_string())
+        }
     }
 
     #[test]
-    fn formats_subscript() {
-        assert_eq!("₀", format!("{}", Subscript(0)));
+    fn adds_superscript_plus_sign_to_positive_numbers() {
+        assert_eq!("⁺⁰", format!("{:+}", Superscript(0)));
+        assert_eq!("⁺¹²³⁴⁵⁶⁷⁸⁹⁰", format!("{:+}", Superscript(1234567890)));
+        assert_eq!("⁻¹²³⁴⁵⁶⁷⁸⁹⁰", format!("{:+}", Superscript(-1234567890)));
+    }
+
+    #[test]
+    fn formats_as_subscript() {
+        for (expected, input) in [
+            ("₀", 0),
+            ("₁", 1),
+            ("₂", 2),
+            ("₃", 3),
+            ("₄", 4),
+            ("₅", 5),
+            ("₆", 6),
+            ("₇", 7),
+            ("₈", 8),
+            ("₉", 9),
+            ("₁₀", 10),
+            ("₁₂₃₄₅₆₇₈₉₀", 1234567890),
+            ("₋₁₂₃₄₅₆₇₈₉₀", -1234567890),
+        ] {
+            assert_eq!(expected, Subscript(input).to_string())
+        }
+    }
+
+    #[test]
+    fn adds_subscript_plus_sign_to_positive_numbers() {
         assert_eq!("₊₀", format!("{:+}", Subscript(0)));
-        assert_eq!("₁", format!("{}", Subscript(1)));
-        assert_eq!("₂", format!("{}", Subscript(2)));
-        assert_eq!("₃", format!("{}", Subscript(3)));
-        assert_eq!("₄", format!("{}", Subscript(4)));
-        assert_eq!("₅", format!("{}", Subscript(5)));
-        assert_eq!("₆", format!("{}", Subscript(6)));
-        assert_eq!("₇", format!("{}", Subscript(7)));
-        assert_eq!("₈", format!("{}", Subscript(8)));
-        assert_eq!("₉", format!("{}", Subscript(9)));
-        assert_eq!("₁₀", format!("{}", Subscript(10)));
-        assert_eq!("₁₂₃₄₅₆₇₈₉₀", format!("{}", Subscript(1234567890)));
         assert_eq!("₊₁₂₃₄₅₆₇₈₉₀", format!("{:+}", Subscript(1234567890)));
-        assert_eq!("₋₁₂₃₄₅₆₇₈₉₀", format!("{:}", Subscript(-1234567890)));
+        assert_eq!("₋₁₂₃₄₅₆₇₈₉₀", format!("{:+}", Subscript(-1234567890)));
     }
 }
