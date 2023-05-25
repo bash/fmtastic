@@ -33,11 +33,14 @@ use std::fmt::{self, Write};
 /// [single character fractions]: http://unicodefractions.com
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub struct VulgarFraction<T> {
+    /// The number displayed above the fraction line.
     pub numerator: T,
+    /// The number displayed below the fraction line.
     pub denominator: T,
 }
 
 impl<T> VulgarFraction<T> {
+    /// Creates a new fraction from a numerator and denominator.
     pub const fn new(numerator: T, denominator: T) -> Self {
         Self {
             numerator,
