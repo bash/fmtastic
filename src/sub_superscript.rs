@@ -79,9 +79,9 @@ macro_rules! impl_display {
                             Some((0, n, LARGEST_EXPONTENT_OF_BASE)),
                             |(_, n, div)| (*div != 0).then(|| (n / div, n % div, div / BASE)),
                         )
-                        .map(|(digit, ..)| digit)
+                        .map(|(digit, ..)| digit as usize)
                         .skip_while(|digit| *digit == 0)
-                        .map(|digit| DIGITS[digit as usize])
+                        .map(|digit| DIGITS[digit])
                         .map(|digit| f.write_char(digit))
                         .collect()
                     }
