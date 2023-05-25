@@ -3,7 +3,7 @@
 [![Docs](https://img.shields.io/docsrs/fmtastic/latest)](https://docs.rs/fmtastic)
 [![Crate Version](https://img.shields.io/crates/v/fmtastic)](https://crates.io/crates/fmtastic)
 
-A **fantastic** crate for **fmt**ing numbers using the appropriate unciode characters via the [`Display`] trait. ✨ \
+A **fantastic** crate for **fmt**ing numbers using the appropriate unicode characters via the [`Display`] trait. ✨ \
 Supports vulgar fractions, super- and subscript.
 
 Contributions are welcome for more formats.

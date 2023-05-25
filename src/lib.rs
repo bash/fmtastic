@@ -1,4 +1,4 @@
-//! A **fantastic** crate for **fmt**ing numbers using the appropriate unciode characters via the [`Display`](std::fmt::Display) trait. ✨ \
+//! A **fantastic** crate for **fmt**ing numbers using the appropriate unicode characters via the [`Display`](std::fmt::Display) trait. ✨ \
 //! Supports vulgar fractions, super- and subscript.
 //!
 //! # [Vulgar Fractions]

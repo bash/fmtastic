@@ -1,5 +1,6 @@
 [package]
 name = "fmtastic"
+description = "Format numbers using the unicode characters via the Display trait."
 version = "0.1.0"
 edition = "2021"
 authors = ["Ruben Schmidmeister <ruben.schmidmeister@icloud.com>"]
