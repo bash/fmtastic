@@ -1,4 +1,8 @@
 # fmtastic ✨
+
+[![Docs](https://img.shields.io/docsrs/fmtastic/latest)](https://docs.rs/fmtastic)
+[![Crate Version](https://img.shields.io/crates/v/fmtastic)](https://crates.io/crates/fmtastic)
+
 A **fantastic** crate for **fmt**ing numbers using the appropriate unciode characters via the [`Display`] trait. ✨ \
 Supports vulgar fractions, super- and subscript.
 
@@ -24,6 +28,8 @@ use fmtastic::{Subscript, Superscript};
 assert_eq!("x₁", format!("x{}", Subscript(1)));
 assert_eq!("n²", format!("n{}", Superscript(2)));
 ```
+
+## [Docs](https://docs.rs/fmtastic)
 
 ## License
 Licensed under either of
