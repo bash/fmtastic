@@ -35,9 +35,9 @@ assert_eq!("n²", format!("n{}", Superscript(2)));
 Licensed under either of
 
 * Apache License, Version 2.0
-  ([license-apache.txt](license-apache.txt) or http://www.apache.org/licenses/LICENSE-2.0)
+  ([license-apache.txt](license-apache.txt) or <http://www.apache.org/licenses/LICENSE-2.0>)
 * MIT license
-  ([license-mit.txt](license-mit.txt) or http://opensource.org/licenses/MIT)
+  ([license-mit.txt](license-mit.txt) or <http://opensource.org/licenses/MIT>)
 
 at your option.
 
