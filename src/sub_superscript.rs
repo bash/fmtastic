@@ -54,7 +54,6 @@ macro_rules! impl_display {
                         exponent
                     };
 
-                    // TODO: support padding, min width (we can't use pad_integral because it uses different sign chars)
                     $(
                         signed!($s);
 
