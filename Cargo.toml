@@ -6,5 +6,3 @@ authors = ["Ruben Schmidmeister <ruben.schmidmeister@icloud.com>"]
 license = "MIT/Apache-2.0"
 readme = "readme.md"
 repository = "https://github.com/bash/fmtastic"
-
-[dependencies]
