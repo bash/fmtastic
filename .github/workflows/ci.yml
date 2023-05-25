@@ -28,3 +28,5 @@ jobs:
       run: cargo fmt --check --all
     - name: Clippy
       run: cargo clippy --workspace -- -Dwarnings
+    - name: Rustdoc
+      run: cargo doc --no-deps --workspace --all-features -- --deny warnings
