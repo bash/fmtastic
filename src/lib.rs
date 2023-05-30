@@ -20,6 +20,7 @@
 //!
 //! [Vulgar Fractions]: https://en.wikipedia.org/wiki/Fraction_(mathematics)#Simple,_common,_or_vulgar_fractions
 
+#![forbid(unsafe_code)]
 #![warn(missing_docs)]
 
 mod sub_superscript;
