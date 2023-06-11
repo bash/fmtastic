@@ -1,3 +1,4 @@
+use crate::integer::{abs, sign, Integer, Sign};
 use crate::{Subscript, Superscript};
 use std::fmt::{self, Write};
 
@@ -24,6 +25,8 @@ use std::fmt::{self, Write};
 /// assert_eq!("+¹⁰⁄₃", format!("{:+}", VulgarFraction::new(-10, -3)));
 /// assert_eq!("-¹⁰⁄₃", format!("{:-}", VulgarFraction::new(-10, 3)));
 /// assert_eq!("-¹⁰⁄₃", format!("{:-}", VulgarFraction::new(10, -3)));
+/// assert_eq!("-¹⁄₀", format!("{:-}", VulgarFraction::new(-1, 0)));
+/// assert_eq!("-⁰⁄₁", format!("{:-}", VulgarFraction::new(0, -1)));
 ///
 /// // No single character fraction
 /// assert_eq!("¹⁄₄", format!("{:#}", VulgarFraction::new(1, 4)));
@@ -71,24 +74,15 @@ macro_rules! impl_from {
 }
 
 macro_rules! impl_display {
-    ($($t:ident $($s:ident)?),+) => {
+    ($($t:ident),+) => {
         $(
             impl fmt::Display for VulgarFraction<$t> {
                 fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                    #[allow(unused_mut)]
-                    let (mut numerator, mut denominator) = (self.numerator, self.denominator);
-                    $(
-                        signed!($s);
+                    let (sign, numerator, denominator) = extract_sign(self.numerator, self.denominator, f);
 
-                        let signum = self.numerator.signum() * self.denominator.signum();
-                        if signum >= 0 && f.sign_plus() {
-                            f.write_char('+')?;
-                            (numerator, denominator) = (numerator.abs(), denominator.abs());
-                        } else if signum < 0 && f.sign_minus() {
-                            f.write_char('-')?;
-                            (numerator, denominator) = (numerator.abs(), denominator.abs());
-                        }
-                    )?
+                    if let Some(sign) = sign {
+                        f.write_char(sign)?;
+                    }
 
                     if let Some(frac) = (!f.alternate()).then(|| find_single_character_fraction(numerator, denominator)).flatten() {
                         f.write_char(frac)
@@ -104,13 +98,20 @@ macro_rules! impl_display {
     }
 }
 
-macro_rules! signed {
-    (signed) => {};
+fn extract_sign<T>(numerator: T, denominator: T, f: &fmt::Formatter) -> (Option<char>, T, T)
+where
+    T: Integer,
+{
+    match sign(numerator) * sign(denominator) {
+        Sign::Positive if f.sign_plus() => (Some('+'), abs(numerator), abs(denominator)),
+        Sign::Negative if f.sign_minus() => (Some('-'), abs(numerator), abs(denominator)),
+        _ => (None, numerator, denominator),
+    }
 }
 
 impl_from!(i8, u8, i16, u16, i32, u32, i64, u64, usize, isize);
 
-impl_display!(i8 signed, u8, i16 signed, u16, i32 signed, u32, i64 signed, u64, usize, isize signed);
+impl_display!(i8, u8, i16, u16, i32, u32, i64, u64, usize, isize);
 
 pub(crate) fn find_single_character_fraction<N>(numerator: N, denominator: N) -> Option<char>
 where

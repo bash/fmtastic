@@ -1,3 +1,4 @@
+use crate::integer::{abs, sign, Sign};
 use std::fmt::{self, Write};
 use std::iter;
 
@@ -40,7 +41,7 @@ pub struct Superscript<T>(pub T);
 pub struct Subscript<T>(pub T);
 
 macro_rules! impl_display {
-    ($wrapper:ident<$($t:ident $($s:ident)?),+>, digits = $digits:expr, minus = $minus:expr, plus = $plus:expr) => {
+    ($wrapper:ident<$($t:ident),+>, digits = $digits:expr, minus = $minus:expr, plus = $plus:expr) => {
         $(
             impl fmt::Display for $wrapper<$t> {
                 fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -54,22 +55,13 @@ macro_rules! impl_display {
                         exponent
                     };
 
-                    $(
-                        signed!($s);
+                    match sign(self.0) {
+                        Sign::Positive if f.sign_plus() => f.write_char($plus)?,
+                        Sign::Negative => f.write_char($minus)?,
+                        _ => {},
+                    };
 
-                        if self.0 < 0 {
-                            f.write_char($minus)?;
-                        } else if f.sign_plus() {
-                            f.write_char($plus)?;
-                        }
-                    )?
-
-                    #[allow(unused_mut)]
-                    let mut n = self.0;
-                    $(
-                        signed!($s);
-                        n = n.abs();
-                    )?
+                    let n = abs(self.0);
 
                     if (n == 0) {
                         f.write_char(DIGITS[0])
@@ -90,16 +82,12 @@ macro_rules! impl_display {
     }
 }
 
-macro_rules! signed {
-    (signed) => {};
-}
-
 impl_display!(
-    Superscript<i8 signed, u8, i16 signed, u16, i32 signed, u32, i64 signed, u64, usize, isize signed>,
+    Superscript<i8, u8, i16, u16, i32, u32, i64, u64, usize, isize>,
     digits = ['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹'], minus = '⁻', plus = '⁺');
 
 impl_display!(
-    Subscript<i8 signed, u8, i16 signed, u16, i32 signed, u32, i64 signed, u64, usize, isize signed>,
+    Subscript<i8, u8, i16, u16, i32, u32, i64, u64, usize, isize>,
     digits = ['₀', '₁', '₂', '₃', '₄', '₅', '₆', '₇', '₈', '₉'], minus = '₋', plus = '₊');
 
 #[cfg(test)]

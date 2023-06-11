@@ -27,6 +27,7 @@ mod sub_superscript;
 pub use sub_superscript::*;
 mod fraction;
 pub use fraction::*;
+mod integer;
 
 #[doc = include_str!("../readme.md")]
 mod doctest_readme {}
