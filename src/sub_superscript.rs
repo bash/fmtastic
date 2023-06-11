@@ -17,6 +17,11 @@ use std::iter;
 /// assert_eq!("⁰", format!("{}", Superscript(0)));
 /// assert_eq!("⁻¹²³", format!("{}", Superscript(-123)));
 /// assert_eq!("⁺¹²³", format!("{:+}", Superscript(123)));
+///
+/// // Binary
+/// assert_eq!("¹⁰¹⁰¹⁰", format!("{:b}", Superscript(0b101010)));
+/// assert_eq!("⁺¹⁰¹⁰¹⁰", format!("{:+b}", Superscript(0b101010)));
+/// assert_eq!("⁻¹⁰¹⁰¹⁰", format!("{:b}", Superscript(-0b101010)));
 /// ```
 #[derive(Debug, Clone, Copy, Eq, PartialEq)]
 pub struct Superscript<T>(pub T);
@@ -36,14 +41,19 @@ pub struct Superscript<T>(pub T);
 /// assert_eq!("₀", format!("{}", Subscript(0)));
 /// assert_eq!("₋₁₂₃", format!("{}", Subscript(-123)));
 /// assert_eq!("₊₁₂₃", format!("{:+}", Subscript(123)));
+///
+/// // Binary
+/// assert_eq!("₁₀₁₀₁₀", format!("{:b}", Subscript(0b101010)));
+/// assert_eq!("₊₁₀₁₀₁₀", format!("{:+b}", Subscript(0b101010)));
+/// assert_eq!("₋₁₀₁₀₁₀", format!("{:b}", Subscript(-0b101010)));
 /// ```
 #[derive(Debug, Clone, Copy, Eq, PartialEq)]
 pub struct Subscript<T>(pub T);
 
-macro_rules! impl_display {
-    ($wrapper:ident<$($t:ident),+>, digits = $digits:expr, minus = $minus:expr, plus = $plus:expr) => {
+macro_rules! impl_fmt {
+    ($trait:ident for $wrapper:ident<$($t:ident),+>, digits = $digits:expr, minus = $minus:expr, plus = $plus:expr) => {
         $(
-            impl fmt::Display for $wrapper<$t> {
+            impl fmt::$trait for $wrapper<$t> {
                 fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
                     const DIGITS: &[char] = &$digits;
                     const BASE: $t = DIGITS.len() as $t;
@@ -82,13 +92,21 @@ macro_rules! impl_display {
     }
 }
 
-impl_display!(
-    Superscript<i8, u8, i16, u16, i32, u32, i64, u64, usize, isize>,
+impl_fmt!(
+    Display for Superscript<i8, u8, i16, u16, i32, u32, i64, u64, usize, isize>,
     digits = ['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹'], minus = '⁻', plus = '⁺');
 
-impl_display!(
-    Subscript<i8, u8, i16, u16, i32, u32, i64, u64, usize, isize>,
+impl_fmt!(
+    Binary for Superscript<i8, u8, i16, u16, i32, u32, i64, u64, usize, isize>,
+    digits = ['⁰', '¹'], minus = '⁻', plus = '⁺');
+
+impl_fmt!(
+    Display for Subscript<i8, u8, i16, u16, i32, u32, i64, u64, usize, isize>,
     digits = ['₀', '₁', '₂', '₃', '₄', '₅', '₆', '₇', '₈', '₉'], minus = '₋', plus = '₊');
+
+impl_fmt!(
+    Binary for Subscript<i8, u8, i16, u16, i32, u32, i64, u64, usize, isize>,
+    digits = ['₀', '₁'], minus = '₋', plus = '₊');
 
 #[cfg(test)]
 mod tests {
