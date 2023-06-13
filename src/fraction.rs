@@ -1,4 +1,4 @@
-use crate::integer::{abs, sign, Integer, Sign};
+use crate::integer::{Integer, Sign};
 use crate::{Subscript, Superscript};
 use std::fmt::{self, Write};
 
@@ -61,40 +61,37 @@ impl<T> From<(T, T)> for VulgarFraction<T> {
     }
 }
 
-macro_rules! impl_from {
-    ($($t:ident),+) => {
-        $(
-            impl From<$t> for VulgarFraction<$t> {
-                fn from(value: $t) -> Self {
-                    VulgarFraction::new(value, 1)
-                }
-            }
-        )+
+impl<T> From<T> for VulgarFraction<T>
+where
+    T: Integer,
+{
+    fn from(value: T) -> Self {
+        VulgarFraction::new(value, T::ONE)
     }
 }
 
-macro_rules! impl_display {
-    ($($t:ident),+) => {
-        $(
-            impl fmt::Display for VulgarFraction<$t> {
-                fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                    let (sign, numerator, denominator) = extract_sign(self.numerator, self.denominator, f);
+impl<T> fmt::Display for VulgarFraction<T>
+where
+    T: Integer,
+{
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let (sign, numerator, denominator) = extract_sign(self.numerator, self.denominator, f);
 
-                    if let Some(sign) = sign {
-                        f.write_char(sign)?;
-                    }
+        if let Some(sign) = sign {
+            f.write_char(sign)?;
+        }
 
-                    if let Some(frac) = (!f.alternate()).then(|| find_single_character_fraction(numerator, denominator)).flatten() {
-                        f.write_char(frac)
-                    } else {
-                        write!(f, "{}", Superscript(numerator))?;
-                        const FRACTION_SLASH: char = '\u{2044}';
-                        f.write_char(FRACTION_SLASH)?;
-                        write!(f, "{}", Subscript(denominator))
-                    }
-                }
-            }
-        )+
+        if let Some(frac) = (!f.alternate())
+            .then(|| find_single_character_fraction(numerator, denominator))
+            .flatten()
+        {
+            f.write_char(frac)
+        } else {
+            write!(f, "{}", Superscript(numerator))?;
+            const FRACTION_SLASH: char = '\u{2044}';
+            f.write_char(FRACTION_SLASH)?;
+            write!(f, "{}", Subscript(denominator))
+        }
     }
 }
 
@@ -102,18 +99,14 @@ fn extract_sign<T>(numerator: T, denominator: T, f: &fmt::Formatter) -> (Option<
 where
     T: Integer,
 {
-    match sign(numerator) * sign(denominator) {
-        Sign::Positive if f.sign_plus() => (Some('+'), abs(numerator), abs(denominator)),
-        Sign::Negative if f.sign_minus() => (Some('-'), abs(numerator), abs(denominator)),
+    match numerator.sign() * denominator.sign() {
+        Sign::Positive if f.sign_plus() => (Some('+'), numerator.abs(), denominator.abs()),
+        Sign::Negative if f.sign_minus() => (Some('-'), numerator.abs(), denominator.abs()),
         _ => (None, numerator, denominator),
     }
 }
 
-impl_from!(i8, u8, i16, u16, i32, u32, i64, u64, usize, isize);
-
-impl_display!(i8, u8, i16, u16, i32, u32, i64, u64, usize, isize);
-
-pub(crate) fn find_single_character_fraction<N>(numerator: N, denominator: N) -> Option<char>
+fn find_single_character_fraction<N>(numerator: N, denominator: N) -> Option<char>
 where
     N: TryInto<u8>,
 {

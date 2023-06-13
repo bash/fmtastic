@@ -1,4 +1,5 @@
-use crate::integer::{abs, sign, Sign};
+use crate::integer::Sign;
+use crate::Integer;
 use std::fmt::{self, Write};
 use std::iter;
 
@@ -26,6 +27,39 @@ use std::iter;
 #[derive(Debug, Clone, Copy, Eq, PartialEq)]
 pub struct Superscript<T>(pub T);
 
+impl<T> From<T> for Superscript<T>
+where
+    T: Integer,
+{
+    fn from(value: T) -> Self {
+        Superscript(value)
+    }
+}
+
+impl<T> fmt::Display for Superscript<T>
+where
+    T: Integer,
+{
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        fmt_number_with_base_and_digits(
+            f,
+            self.0,
+            '⁺',
+            '⁻',
+            &['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹'],
+        )
+    }
+}
+
+impl<T> fmt::Binary for Superscript<T>
+where
+    T: Integer,
+{
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        fmt_number_with_base_and_digits(f, self.0, '⁺', '⁻', &['⁰', '¹'])
+    }
+}
+
 /// A number that can be formatted as subscript using the [`Display`][`std::fmt::Display`] trait.
 ///
 /// [`Display`][`std::fmt::Display`] is implemented for all common number types.
@@ -50,63 +84,77 @@ pub struct Superscript<T>(pub T);
 #[derive(Debug, Clone, Copy, Eq, PartialEq)]
 pub struct Subscript<T>(pub T);
 
-macro_rules! impl_fmt {
-    ($trait:ident for $wrapper:ident<$($t:ident),+>, digits = $digits:expr, minus = $minus:expr, plus = $plus:expr) => {
-        $(
-            impl fmt::$trait for $wrapper<$t> {
-                fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-                    const DIGITS: &[char] = &$digits;
-                    const BASE: $t = DIGITS.len() as $t;
-                    const LARGEST_EXPONTENT_OF_BASE: $t = {
-                        let mut exponent: $t = 1;
-                        while let Some(e) = exponent.checked_mul(BASE) {
-                            exponent = e;
-                        }
-                        exponent
-                    };
-
-                    match sign(self.0) {
-                        Sign::Positive if f.sign_plus() => f.write_char($plus)?,
-                        Sign::Negative => f.write_char($minus)?,
-                        _ => {},
-                    };
-
-                    let n = abs(self.0);
-
-                    if (n == 0) {
-                        f.write_char(DIGITS[0])
-                    } else {
-                        iter::successors(
-                            Some((0, n, LARGEST_EXPONTENT_OF_BASE)),
-                            |(_, n, div)| (*div != 0).then(|| (n / div, n % div, div / BASE)),
-                        )
-                        .map(|(digit, ..)| digit as usize)
-                        .skip_while(|digit| *digit == 0)
-                        .map(|digit| DIGITS[digit])
-                        .map(|digit| f.write_char(digit))
-                        .collect()
-                    }
-                }
-            }
-        )+
+impl<T> From<T> for Subscript<T>
+where
+    T: Integer,
+{
+    fn from(value: T) -> Self {
+        Subscript(value)
     }
 }
 
-impl_fmt!(
-    Display for Superscript<i8, u8, i16, u16, i32, u32, i64, u64, usize, isize>,
-    digits = ['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹'], minus = '⁻', plus = '⁺');
+impl<T> fmt::Display for Subscript<T>
+where
+    T: Integer,
+{
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        fmt_number_with_base_and_digits(
+            f,
+            self.0,
+            '₊',
+            '₋',
+            &['₀', '₁', '₂', '₃', '₄', '₅', '₆', '₇', '₈', '₉'],
+        )
+    }
+}
 
-impl_fmt!(
-    Binary for Superscript<i8, u8, i16, u16, i32, u32, i64, u64, usize, isize>,
-    digits = ['⁰', '¹'], minus = '⁻', plus = '⁺');
+impl<T> fmt::Binary for Subscript<T>
+where
+    T: Integer,
+{
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        fmt_number_with_base_and_digits(f, self.0, '₊', '₋', &['₀', '₁'])
+    }
+}
 
-impl_fmt!(
-    Display for Subscript<i8, u8, i16, u16, i32, u32, i64, u64, usize, isize>,
-    digits = ['₀', '₁', '₂', '₃', '₄', '₅', '₆', '₇', '₈', '₉'], minus = '₋', plus = '₊');
+fn fmt_number_with_base_and_digits<T: Integer>(
+    f: &mut fmt::Formatter<'_>,
+    n: T,
+    plus: char,
+    minus: char,
+    digits: &[char],
+) -> fmt::Result {
+    match n.sign() {
+        Sign::Positive if f.sign_plus() => f.write_char(plus)?,
+        Sign::Negative => f.write_char(minus)?,
+        _ => {}
+    };
 
-impl_fmt!(
-    Binary for Subscript<i8, u8, i16, u16, i32, u32, i64, u64, usize, isize>,
-    digits = ['₀', '₁'], minus = '₋', plus = '₊');
+    if n == T::ZERO {
+        f.write_char(digits[0])
+    } else {
+        iter_digits(n, T::from_usize(digits.len()))
+            .map(|digit| digits[digit])
+            .try_for_each(|digit| f.write_char(digit))
+    }
+}
+
+fn iter_digits<T: Integer>(n: T, base: T) -> impl Iterator<Item = usize> {
+    let n = n.abs();
+    let largest_exponent_of_base: T = {
+        let mut exponent: T = T::ONE;
+        while let Some(e) = exponent.checked_mul(base) {
+            exponent = e;
+        }
+        exponent
+    };
+    iter::successors(
+        Some((T::ZERO, n, largest_exponent_of_base)),
+        move |(_, n, div)| (*div != T::ZERO).then(|| (*n / *div, *n % *div, *div / base)),
+    )
+    .map(|(digit, ..)| digit.as_usize())
+    .skip_while(|digit| *digit == 0)
+}
 
 #[cfg(test)]
 mod tests {
