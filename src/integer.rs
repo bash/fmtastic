@@ -23,6 +23,12 @@ pub(crate) use self::sealed::*;
 /// such as its supertraits.
 pub trait Integer: sealed::Integer_ {}
 
+/// Marker trait for signed integers.
+pub trait SignedInteger: Integer {}
+
+/// Marker trait for unsigned integers.
+pub trait UnsignedInteger: Integer {}
+
 mod sealed {
     use std::ops::{Div, Rem};
 
@@ -98,6 +104,8 @@ mod sealed {
             $(
                 impl Integer for $ty {}
 
+                impl UnsignedInteger for $ty {}
+
                 impl Integer_ for $ty {
                     common_integer_items!();
 
@@ -117,6 +125,8 @@ mod sealed {
         ($($ty:ty),+) => {
             $(
                 impl Integer for $ty {}
+
+                impl SignedInteger for $ty {}
 
                 impl Integer_ for $ty {
                     common_integer_items!();
