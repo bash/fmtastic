@@ -139,7 +139,7 @@ fn fmt_number_with_base_and_digits<T: Integer>(
     }
 }
 
-fn iter_digits<T: Integer>(n: T, base: T) -> impl Iterator<Item = usize> {
+pub(crate) fn iter_digits<T: Integer>(n: T, base: T) -> impl Iterator<Item = usize> {
     let n = n.abs();
     let largest_exponent_of_base: T = {
         let mut exponent: T = T::ONE;

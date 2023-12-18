@@ -29,6 +29,18 @@ assert_eq!("x₁", format!("x{}", Subscript(1)));
 assert_eq!("n²", format!("n{}", Superscript(2)));
 ```
 
+### Seven-Segment Digits
+Formats an unsigned integer using seven-segment digits
+from the [Legacy Computing] block.
+
+```rust
+use fmtastic::Segmented;
+
+assert_eq!("🯶🯲🯸", format!("{}", Segmented(628_u32)));
+```
+
+[Legacy Computing]: https://www.unicode.org/charts/PDF/U1FB00.pdf
+
 ## [Docs](https://docs.rs/fmtastic)
 
 ## License

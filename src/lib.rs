@@ -19,6 +19,16 @@
 //! ```
 //!
 //! [Vulgar Fractions]: https://en.wikipedia.org/wiki/Fraction_(mathematics)#Simple,_common,_or_vulgar_fractions
+//!
+//! # Seven-Segment Digits
+//! Formats an unsigned integer using seven-segment digits
+//! from the [Legacy Computing] block.
+//! ```
+//! # use fmtastic::Segmented;
+//! assert_eq!("🯶🯲🯸", format!("{}", Segmented(628_u32)));
+//! ```
+//!
+//! [Legacy Computing]: https://www.unicode.org/charts/PDF/U1FB00.pdf
 
 #![forbid(unsafe_code)]
 #![warn(missing_docs)]
@@ -29,6 +39,8 @@ mod fraction;
 pub use fraction::*;
 mod integer;
 pub use integer::*;
+mod seven_segment;
+pub use seven_segment::*;
 
 #[doc = include_str!("../readme.md")]
 mod doctest_readme {}
