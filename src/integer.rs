@@ -30,9 +30,8 @@ pub trait SignedInteger: Integer {}
 pub trait UnsignedInteger: Integer {}
 
 mod sealed {
-    use std::ops::{Div, Rem};
-
     use super::*;
+    use std::ops::{Div, Rem};
 
     pub trait Integer_
     where
