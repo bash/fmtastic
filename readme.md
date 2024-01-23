@@ -39,6 +39,15 @@ use fmtastic::Segmented;
 assert_eq!("🯶🯲🯸", format!("{}", Segmented(628_u32)));
 ```
 
+### Tally Marks
+Formats an unsigned integer as tally marks.
+```rust
+use fmtastic::TallyMarks;
+
+assert_eq!("𝍷𝍷𝍷", TallyMarks(3_u32).to_string());
+assert_eq!("𝍸𝍸𝍷𝍷", TallyMarks(12_u32).to_string());
+```
+
 [Legacy Computing]: https://www.unicode.org/charts/PDF/U1FB00.pdf
 
 ## [Docs](https://docs.rs/fmtastic)

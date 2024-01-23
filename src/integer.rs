@@ -23,15 +23,16 @@ pub(crate) use self::sealed::*;
 /// such as its supertraits.
 pub trait Integer: sealed::Integer_ {}
 
-/// Marker trait for signed integers.
+/// Abstraction over signed integer types.
 pub trait SignedInteger: Integer {}
 
-/// Marker trait for unsigned integers.
+/// Abstraction over unsigned integer types.
+/// Unsigned integers can be formatted as [`Segmented`](`crate::Segmented`) or [`TallyMarks`](`crate::TallyMarks`).
 pub trait UnsignedInteger: Integer {}
 
 mod sealed {
     use super::*;
-    use std::ops::{Div, Rem};
+    use std::ops::{AddAssign, Div, Rem};
 
     pub trait Integer_
     where
@@ -41,6 +42,8 @@ mod sealed {
         Self: Rem<Self, Output = Self>,
         Self: 'static,
         Self: TryInto<u8>,
+        Self: PartialOrd<Self>,
+        Self: AddAssign<Self>,
     {
         const ZERO: Self;
         const ONE: Self;

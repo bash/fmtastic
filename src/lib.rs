@@ -29,6 +29,16 @@
 //! ```
 //!
 //! [Legacy Computing]: https://www.unicode.org/charts/PDF/U1FB00.pdf
+//!
+//! # Tally Marks
+//! Formats an unsigned integer as tally marks.
+//!
+//! ```
+//! # use fmtastic::TallyMarks;
+//! assert_eq!("𝍷𝍷𝍷", TallyMarks(3_u32).to_string());
+//! assert_eq!("𝍸𝍸𝍷𝍷", TallyMarks(12_u32).to_string());
+//! ```
+//!
 
 #![forbid(unsafe_code)]
 #![warn(missing_docs)]
@@ -39,6 +49,8 @@ mod fraction;
 pub use fraction::*;
 mod integer;
 pub use integer::*;
+mod tally_marks;
+pub use tally_marks::*;
 mod seven_segment;
 pub use seven_segment::*;
 
