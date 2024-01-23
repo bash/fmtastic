@@ -1,6 +1,5 @@
 use crate::UnsignedInteger;
 use std::fmt;
-use std::ops::Range;
 
 /// Formats an unsigned integer using seven-segment digits
 /// from the [Legacy Computing] block.
@@ -43,7 +42,6 @@ where
 impl<T> fmt::Display for Segmented<T>
 where
     T: UnsignedInteger,
-    Range<T>: Iterator<Item = T>,
 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         if self.0 == T::ZERO {
