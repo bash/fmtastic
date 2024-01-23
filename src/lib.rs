@@ -43,4 +43,5 @@ mod seven_segment;
 pub use seven_segment::*;
 
 #[doc = include_str!("../readme.md")]
-mod doctest_readme {}
+#[cfg(doctest)]
+pub mod readme_doctest {}
