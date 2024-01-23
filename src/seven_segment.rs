@@ -26,6 +26,10 @@ use std::fmt;
 /// assert_eq!("🯷", Segmented(7_u32).to_string());
 /// assert_eq!("🯸", Segmented(8_u32).to_string());
 /// assert_eq!("🯹", Segmented(9_u32).to_string());
+///
+/// // Binary
+/// assert_eq!("🯰", format!("{:b}", Segmented(0_u8)));
+/// assert_eq!("🯱🯰🯱🯰🯱🯰", format!("{:+b}", Segmented(0b101010_u8)));
 /// ```
 #[derive(Debug, Clone, Copy, Eq, PartialEq)]
 pub struct Segmented<T>(pub T);
@@ -36,6 +40,22 @@ where
 {
     fn from(value: T) -> Self {
         Segmented(value)
+    }
+}
+
+impl<T> fmt::Binary for Segmented<T>
+where
+    T: UnsignedInteger,
+{
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        if self.0 == T::ZERO {
+            write!(f, "{}", DIGITS[0])?;
+        } else {
+            for digit in crate::sub_superscript::iter_digits(self.0, T::from_usize(2)) {
+                write!(f, "{}", DIGITS[digit])?;
+            }
+        }
+        Ok(())
     }
 }
 
