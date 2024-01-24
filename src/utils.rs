@@ -2,12 +2,9 @@ use crate::{Base, Integer};
 
 pub(crate) fn iter_digits<T: Integer, B: Base<T>>(n: T) -> impl Iterator<Item = usize> {
     let n = n.abs();
-    let largest_exp = B::ilog(n);
-
-    (0..=largest_exp).rev().scan(n, move |remainder, exp| {
-        let divisor = B::VALUE.pow(exp);
-        let digit = *remainder / divisor;
-        *remainder = n % divisor;
+    B::powers(n).scan(n, move |remainder, power| {
+        let digit = *remainder / power;
+        *remainder = n % power;
         Some(digit.as_usize())
     })
 }

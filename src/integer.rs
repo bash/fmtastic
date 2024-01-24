@@ -40,7 +40,13 @@ pub(crate) struct Two;
 
 pub(crate) trait Base<I: sealed::Integer_>: fmt::Debug {
     const VALUE: I;
+
     fn ilog(x: I) -> u32;
+
+    fn powers(x: I) -> impl Iterator<Item = I> {
+        let largest_exp = Self::ilog(x);
+        (0..=largest_exp).rev().map(|e| Self::VALUE.pow(e))
+    }
 }
 
 mod sealed {
