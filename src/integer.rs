@@ -71,8 +71,6 @@ mod sealed {
             to: Self,
         ) -> impl Iterator<Item = Self> + DoubleEndedIterator;
 
-        /// The sign of the integer value.
-        /// Note that zero has a positive sign for our purposes.
         fn sign(self) -> Sign;
 
         fn abs(self) -> Self;
