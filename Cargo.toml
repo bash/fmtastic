@@ -9,5 +9,6 @@ license = "MIT/Apache-2.0"
 readme = "readme.md"
 repository = "https://github.com/bash/fmtastic"
 homepage = "https://github.com/bash/fmtastic"
-keywords = ["unicode", "display", "fraction", "subscript", "superscript"]
+keywords = ["unicode", "display", "fraction", "subscript", "superscript", "seven-segment", "tally"]
 categories = ["value-formatting"]
+exclude = [".github/", ".mailmap", ".gitignore"]
