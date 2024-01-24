@@ -1,8 +1,8 @@
 [package]
 name = "fmtastic"
 description = "Format numbers using the unicode characters via the Display trait."
-version = "0.1.0"
-rust-version = "1.56.1"
+version = "0.2.0"
+rust-version = "1.75.0"
 edition = "2021"
 authors = ["Tau"]
 license = "MIT/Apache-2.0"
