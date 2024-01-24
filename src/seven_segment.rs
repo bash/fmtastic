@@ -1,3 +1,4 @@
+use crate::integer::{Base, IntegerImpl};
 use crate::utils::iter_digits;
 use crate::UnsignedInteger;
 use std::fmt;
@@ -49,14 +50,7 @@ where
     T: UnsignedInteger,
 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        if self.0 == T::ZERO {
-            write!(f, "{}", DIGITS[0])?;
-        } else {
-            for digit in iter_digits::<_, T::BaseTwo>(self.0) {
-                write!(f, "{}", DIGITS[digit])?;
-            }
-        }
-        Ok(())
+        fmt_seven_segment::<_, <T::Impl as IntegerImpl>::BaseTwo>(self.0.to_impl(), f)
     }
 }
 
@@ -65,16 +59,19 @@ where
     T: UnsignedInteger,
 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        if self.0 == T::ZERO {
-            write!(f, "{}", DIGITS[0])?;
-        } else {
-            for digit in iter_digits::<_, T::BaseTen>(self.0) {
-                write!(f, "{}", DIGITS[digit])?;
-            }
-        }
-
-        Ok(())
+        fmt_seven_segment::<_, <T::Impl as IntegerImpl>::BaseTen>(self.0.to_impl(), f)
     }
+}
+
+fn fmt_seven_segment<T: IntegerImpl, B: Base<T>>(n: T, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+    if n == T::ZERO {
+        write!(f, "{}", DIGITS[0])?;
+    } else {
+        for digit in iter_digits::<_, B>(n) {
+            write!(f, "{}", DIGITS[digit])?;
+        }
+    }
+    Ok(())
 }
 
 const DIGITS: [&str; 10] = [

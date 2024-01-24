@@ -43,12 +43,43 @@
 #![forbid(unsafe_code)]
 #![warn(missing_docs)]
 
+/// An abstraction over all integer types.
+/// Integers can be formatted as [`Subscript`], [`Subscript`] or [`VulgarFraction`].
+///
+/// Use this trait if you want to abstract over integers that can be formatted
+/// by one of this crate's formats:
+///
+/// ```
+/// use fmtastic::{Subscript, Integer};
+///
+/// assert_eq!("x₁", x_with_index(1u8));
+/// assert_eq!("x₅", x_with_index(5u64));
+///
+/// fn x_with_index<T: Integer>(index: T) -> String {
+///     format!("x{}", Subscript(index))
+/// }
+/// ```
+#[allow(private_bounds)]
+pub trait Integer: ToIntegerImpl {}
+
+/// Abstraction over signed integer types.
+pub trait SignedInteger: Integer {}
+
+/// Abstraction over unsigned integer types.
+/// Unsigned integers can be formatted as [`Segmented`] or [`TallyMarks`].
+pub trait UnsignedInteger: Integer {}
+
+pub(crate) trait ToIntegerImpl {
+    type Impl: crate::integer::IntegerImpl<Public = Self>;
+
+    fn to_impl(&self) -> Self::Impl;
+}
+
 mod sub_superscript;
 pub use sub_superscript::*;
 mod fraction;
 pub use fraction::*;
 mod integer;
-pub use integer::*;
 mod tally_marks;
 pub use tally_marks::*;
 mod seven_segment;

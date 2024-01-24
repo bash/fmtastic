@@ -1,3 +1,4 @@
+use crate::integer::IntegerImpl;
 use crate::UnsignedInteger;
 use std::fmt::{self, Write};
 
@@ -37,11 +38,15 @@ where
     T: UnsignedInteger,
 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        const TALLY_MARK_ONE: char = '\u{1D377}';
-        const TALLY_MARK_FIVE: char = '\u{1D378}';
-        let (fives, ones) = (self.0 / T::FIVE, self.0 % T::FIVE);
-        T::range(T::ZERO, fives).try_for_each(|_| f.write_char(TALLY_MARK_FIVE))?;
-        T::range(T::ZERO, ones).try_for_each(|_| f.write_char(TALLY_MARK_ONE))?;
-        Ok(())
+        fmt_tally_marks(self.0.to_impl(), f)
     }
+}
+
+fn fmt_tally_marks<T: IntegerImpl>(n: T, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+    const TALLY_MARK_ONE: char = '\u{1D377}';
+    const TALLY_MARK_FIVE: char = '\u{1D378}';
+    let (fives, ones) = (n / T::FIVE, n % T::FIVE);
+    T::range(T::ZERO, fives).try_for_each(|_| f.write_char(TALLY_MARK_FIVE))?;
+    T::range(T::ZERO, ones).try_for_each(|_| f.write_char(TALLY_MARK_ONE))?;
+    Ok(())
 }

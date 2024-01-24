@@ -1,4 +1,5 @@
-use crate::integer::{Integer, Sign};
+use crate::integer::{IntegerImpl, Sign};
+use crate::Integer;
 use crate::{Subscript, Superscript};
 use std::fmt::{self, Write};
 
@@ -67,7 +68,7 @@ where
     T: Integer,
 {
     fn from(value: T) -> Self {
-        VulgarFraction::new(value, T::ONE)
+        VulgarFraction::new(value, <T::Impl as IntegerImpl>::ONE.into_public())
     }
 }
 
@@ -76,7 +77,8 @@ where
     T: Integer,
 {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let (sign, numerator, denominator) = extract_sign(self.numerator, self.denominator, f);
+        let (sign, numerator, denominator) =
+            extract_sign(self.numerator.to_impl(), self.denominator.to_impl(), f);
 
         if let Some(sign) = sign {
             f.write_char(sign)?;
@@ -88,17 +90,17 @@ where
         {
             f.write_char(frac)
         } else {
-            write!(f, "{}", Superscript(numerator))?;
+            write!(f, "{}", Superscript(numerator.into_public()))?;
             const FRACTION_SLASH: char = '\u{2044}';
             f.write_char(FRACTION_SLASH)?;
-            write!(f, "{}", Subscript(denominator))
+            write!(f, "{}", Subscript(denominator.into_public()))
         }
     }
 }
 
 fn extract_sign<T>(numerator: T, denominator: T, f: &fmt::Formatter) -> (Option<char>, T, T)
 where
-    T: Integer,
+    T: IntegerImpl,
 {
     match numerator.sign() * denominator.sign() {
         Sign::PositiveOrZero if f.sign_plus() => (Some('+'), numerator.abs(), denominator.abs()),

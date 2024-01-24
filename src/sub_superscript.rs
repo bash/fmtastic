@@ -1,6 +1,6 @@
-use crate::integer::Sign;
+use crate::integer::{Base, IntegerImpl, Sign};
 use crate::utils::iter_digits;
-use crate::{Base, Integer};
+use crate::Integer;
 use std::fmt::{self, Write};
 
 /// A number that can be formatted as superscript using the [`Display`][`std::fmt::Display`] trait.
@@ -41,9 +41,9 @@ where
     T: Integer,
 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        fmt_number_with_base_and_digits::<_, T::BaseTen>(
+        fmt_number_with_base_and_digits::<_, <T::Impl as IntegerImpl>::BaseTen>(
             f,
-            self.0,
+            self.0.to_impl(),
             '⁺',
             '⁻',
             &['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹'],
@@ -56,7 +56,13 @@ where
     T: Integer,
 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        fmt_number_with_base_and_digits::<_, T::BaseTwo>(f, self.0, '⁺', '⁻', &['⁰', '¹'])
+        fmt_number_with_base_and_digits::<_, <T::Impl as IntegerImpl>::BaseTwo>(
+            f,
+            self.0.to_impl(),
+            '⁺',
+            '⁻',
+            &['⁰', '¹'],
+        )
     }
 }
 
@@ -98,9 +104,9 @@ where
     T: Integer,
 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        fmt_number_with_base_and_digits::<_, T::BaseTen>(
+        fmt_number_with_base_and_digits::<_, <T::Impl as IntegerImpl>::BaseTen>(
             f,
-            self.0,
+            self.0.to_impl(),
             '₊',
             '₋',
             &['₀', '₁', '₂', '₃', '₄', '₅', '₆', '₇', '₈', '₉'],
@@ -113,11 +119,17 @@ where
     T: Integer,
 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        fmt_number_with_base_and_digits::<_, T::BaseTwo>(f, self.0, '₊', '₋', &['₀', '₁'])
+        fmt_number_with_base_and_digits::<_, <T::Impl as IntegerImpl>::BaseTwo>(
+            f,
+            self.0.to_impl(),
+            '₊',
+            '₋',
+            &['₀', '₁'],
+        )
     }
 }
 
-fn fmt_number_with_base_and_digits<T: Integer, B: Base<T>>(
+fn fmt_number_with_base_and_digits<T: IntegerImpl, B: Base<T>>(
     f: &mut fmt::Formatter<'_>,
     n: T,
     plus: char,
