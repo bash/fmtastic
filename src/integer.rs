@@ -1,6 +1,6 @@
 use core::fmt;
-use std::ops::Mul;
-use std::ops::{Div, Rem, Sub};
+use core::ops::Mul;
+use core::ops::{Div, Rem, Sub};
 
 pub(crate) trait IntegerImpl
 where

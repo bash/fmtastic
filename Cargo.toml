@@ -12,3 +12,7 @@ homepage = "https://github.com/bash/fmtastic"
 keywords = ["unicode", "formatting", "fraction", "subscript", "superscript"]
 categories = ["value-formatting"]
 exclude = [".github/", ".mailmap", ".gitignore"]
+
+[features]
+default = ["std"]
+std = []

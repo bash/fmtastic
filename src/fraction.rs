@@ -1,11 +1,11 @@
 use crate::integer::{IntegerImpl, Sign};
 use crate::Integer;
 use crate::{Subscript, Superscript};
-use std::fmt::{self, Write};
+use core::fmt::{self, Write};
 
-/// A [Vulgar Fraction] that can be formatted as a unicode fraction using the [`Display`][`std::fmt::Display`] trait.
+/// A [Vulgar Fraction] that can be formatted as a unicode fraction using the [`Display`][`core::fmt::Display`] trait.
 ///
-/// [`Display`][`std::fmt::Display`] is implemented for all common number types.
+/// [`Display`][`core::fmt::Display`] is implemented for all common number types.
 ///
 /// ## Formatting Flags
 /// ### Alternate `#`

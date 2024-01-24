@@ -1,4 +1,4 @@
-//! A **fantastic** crate for **fmt**ing numbers using the appropriate unicode characters via the [`Display`](std::fmt::Display) trait. ✨ \
+//! A **fantastic** crate for **fmt**ing numbers using the appropriate unicode characters via the [`Display`](core::fmt::Display) trait. ✨ \
 //! Supports vulgar fractions, super- and subscript.
 //!
 //! # [Vulgar Fractions]
@@ -38,10 +38,10 @@
 //! assert_eq!("𝍷𝍷𝍷", TallyMarks(3_u32).to_string());
 //! assert_eq!("𝍸𝍸𝍷𝍷", TallyMarks(12_u32).to_string());
 //! ```
-//!
 
 #![forbid(unsafe_code)]
 #![warn(missing_docs)]
+#![cfg_attr(not(feature = "std"), no_std)]
 
 /// An abstraction over all integer types.
 /// Integers can be formatted as [`Subscript`], [`Subscript`] or [`VulgarFraction`].

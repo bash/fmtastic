@@ -1,6 +1,6 @@
 use crate::integer::IntegerImpl;
 use crate::UnsignedInteger;
-use std::fmt::{self, Write};
+use core::fmt::{self, Write};
 
 /// Formats an unsigned integer as tally marks.
 ///

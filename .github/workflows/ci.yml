@@ -17,6 +17,8 @@ jobs:
     - uses: actions/checkout@v3
     - name: Build
       run: cargo build --workspace
+    - name: 'Build with #![no_std]'
+      run: cargo build --workspace --no-default-features
     - name: Run tests
       run: cargo test --workspace
   lint:

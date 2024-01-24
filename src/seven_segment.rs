@@ -1,7 +1,7 @@
 use crate::digits::iter_digits;
 use crate::integer::{Base, IntegerImpl};
 use crate::UnsignedInteger;
-use std::fmt;
+use core::fmt;
 
 /// Formats an unsigned integer using seven-segment digits
 /// from the [Legacy Computing] block.

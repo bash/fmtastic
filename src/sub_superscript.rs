@@ -1,11 +1,11 @@
 use crate::digits::iter_digits;
 use crate::integer::{Base, IntegerImpl, Sign};
 use crate::Integer;
-use std::fmt::{self, Write};
+use core::fmt::{self, Write};
 
-/// A number that can be formatted as superscript using the [`Display`][`std::fmt::Display`] trait.
+/// A number that can be formatted as superscript using the [`Display`][`core::fmt::Display`] trait.
 ///
-/// [`Display`][`std::fmt::Display`] is implemented for all common number types.
+/// [`Display`][`core::fmt::Display`] is implemented for all common number types.
 ///
 /// ## Formatting Flags
 /// ### Sign: `+`
@@ -66,9 +66,9 @@ where
     }
 }
 
-/// A number that can be formatted as subscript using the [`Display`][`std::fmt::Display`] trait.
+/// A number that can be formatted as subscript using the [`Display`][`core::fmt::Display`] trait.
 ///
-/// [`Display`][`std::fmt::Display`] is implemented for all common number types.
+/// [`Display`][`core::fmt::Display`] is implemented for all common number types.
 ///
 /// ## Formatting Flags
 /// ### Sign: `+`
