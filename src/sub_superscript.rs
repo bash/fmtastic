@@ -1,7 +1,7 @@
 use crate::integer::Sign;
-use crate::Integer;
+use crate::utils::iter_digits;
+use crate::{Base, Integer};
 use std::fmt::{self, Write};
-use std::iter;
 
 /// A number that can be formatted as superscript using the [`Display`][`std::fmt::Display`] trait.
 ///
@@ -41,7 +41,7 @@ where
     T: Integer,
 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        fmt_number_with_base_and_digits(
+        fmt_number_with_base_and_digits::<_, T::BaseTen>(
             f,
             self.0,
             '⁺',
@@ -56,7 +56,7 @@ where
     T: Integer,
 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        fmt_number_with_base_and_digits(f, self.0, '⁺', '⁻', &['⁰', '¹'])
+        fmt_number_with_base_and_digits::<_, T::BaseTwo>(f, self.0, '⁺', '⁻', &['⁰', '¹'])
     }
 }
 
@@ -98,7 +98,7 @@ where
     T: Integer,
 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        fmt_number_with_base_and_digits(
+        fmt_number_with_base_and_digits::<_, T::BaseTen>(
             f,
             self.0,
             '₊',
@@ -113,11 +113,11 @@ where
     T: Integer,
 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        fmt_number_with_base_and_digits(f, self.0, '₊', '₋', &['₀', '₁'])
+        fmt_number_with_base_and_digits::<_, T::BaseTwo>(f, self.0, '₊', '₋', &['₀', '₁'])
     }
 }
 
-fn fmt_number_with_base_and_digits<T: Integer>(
+fn fmt_number_with_base_and_digits<T: Integer, B: Base<T>>(
     f: &mut fmt::Formatter<'_>,
     n: T,
     plus: char,
@@ -133,27 +133,10 @@ fn fmt_number_with_base_and_digits<T: Integer>(
     if n == T::ZERO {
         f.write_char(digits[0])
     } else {
-        iter_digits(n, T::from_usize(digits.len()))
+        iter_digits::<T, B>(n)
             .map(|digit| digits[digit])
             .try_for_each(|digit| f.write_char(digit))
     }
-}
-
-pub(crate) fn iter_digits<T: Integer>(n: T, base: T) -> impl Iterator<Item = usize> {
-    let n = n.abs();
-    let largest_exponent_of_base: T = {
-        let mut exponent: T = T::ONE;
-        while let Some(e) = exponent.checked_mul(base) {
-            exponent = e;
-        }
-        exponent
-    };
-    iter::successors(
-        Some((T::ZERO, n, largest_exponent_of_base)),
-        move |(_, n, div)| (*div != T::ZERO).then(|| (*n / *div, *n % *div, *div / base)),
-    )
-    .map(|(digit, ..)| digit.as_usize())
-    .skip_while(|digit| *digit == 0)
 }
 
 #[cfg(test)]

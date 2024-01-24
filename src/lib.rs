@@ -54,6 +54,8 @@ pub use tally_marks::*;
 mod seven_segment;
 pub use seven_segment::*;
 
+mod utils;
+
 #[doc = include_str!("../readme.md")]
 #[cfg(doctest)]
 pub mod readme_doctest {}

@@ -39,23 +39,9 @@ where
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         const TALLY_MARK_ONE: char = '\u{1D377}';
         const TALLY_MARK_FIVE: char = '\u{1D378}';
-
-        let five = T::from_usize(5);
-        let (fives, ones) = (self.0 / five, self.0 % five);
-
-        // We can't use `Range` here, that would require us
-        // to be able to have `Step` as supertrait of `Integer`,
-        // but `Step` is currently unstable.
-        let mut iteration = T::ZERO;
-        while iteration < fives {
-            f.write_char(TALLY_MARK_FIVE)?;
-            iteration += T::ONE;
-        }
-
-        for _ in 0..ones.as_usize() {
-            f.write_char(TALLY_MARK_ONE)?;
-        }
-
+        let (fives, ones) = (self.0 / T::FIVE, self.0 % T::FIVE);
+        T::range(T::ZERO, fives).try_for_each(|_| f.write_char(TALLY_MARK_FIVE))?;
+        T::range(T::ZERO, ones).try_for_each(|_| f.write_char(TALLY_MARK_ONE))?;
         Ok(())
     }
 }

@@ -1,3 +1,4 @@
+use crate::utils::iter_digits;
 use crate::UnsignedInteger;
 use std::fmt;
 
@@ -51,7 +52,7 @@ where
         if self.0 == T::ZERO {
             write!(f, "{}", DIGITS[0])?;
         } else {
-            for digit in crate::sub_superscript::iter_digits(self.0, T::from_usize(2)) {
+            for digit in iter_digits::<_, T::BaseTwo>(self.0) {
                 write!(f, "{}", DIGITS[digit])?;
             }
         }
@@ -67,7 +68,7 @@ where
         if self.0 == T::ZERO {
             write!(f, "{}", DIGITS[0])?;
         } else {
-            for digit in crate::sub_superscript::iter_digits(self.0, T::from_usize(DIGITS.len())) {
+            for digit in iter_digits::<_, T::BaseTen>(self.0) {
                 write!(f, "{}", DIGITS[digit])?;
             }
         }

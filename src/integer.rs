@@ -1,3 +1,4 @@
+use core::fmt;
 use std::ops::Mul;
 
 pub(crate) use self::sealed::*;
@@ -21,6 +22,7 @@ pub(crate) use self::sealed::*;
 ///
 /// **Do not** depend on any of this trait's implementation details
 /// such as its supertraits.
+#[allow(private_bounds)]
 pub trait Integer: sealed::Integer_ {}
 
 /// Abstraction over signed integer types.
@@ -30,23 +32,44 @@ pub trait SignedInteger: Integer {}
 /// Unsigned integers can be formatted as [`Segmented`](`crate::Segmented`) or [`TallyMarks`](`crate::TallyMarks`).
 pub trait UnsignedInteger: Integer {}
 
+#[derive(Debug)]
+pub(crate) struct Ten;
+
+#[derive(Debug)]
+pub(crate) struct Two;
+
+pub(crate) trait Base<I: sealed::Integer_>: fmt::Debug {
+    const VALUE: I;
+    fn ilog(x: I) -> u32;
+}
+
 mod sealed {
     use super::*;
-    use std::ops::{AddAssign, Div, Rem};
+    use std::ops::{Div, Rem, Sub};
 
-    pub trait Integer_
+    pub(crate) trait Integer_
     where
         Self: Copy,
-        Self: PartialEq<Self>,
         Self: Div<Self, Output = Self>,
         Self: Rem<Self, Output = Self>,
-        Self: 'static,
         Self: TryInto<u8>,
         Self: PartialOrd<Self>,
-        Self: AddAssign<Self>,
+        Self: Sub<Self, Output = Self>,
+        Self: std::fmt::Debug,
     {
         const ZERO: Self;
         const ONE: Self;
+        const FIVE: Self;
+
+        type BaseTwo: Base<Self>;
+        type BaseTen: Base<Self>;
+
+        fn range(from: Self, to: Self) -> impl Iterator<Item = Self> + DoubleEndedIterator;
+
+        fn range_inclusive(
+            from: Self,
+            to: Self,
+        ) -> impl Iterator<Item = Self> + DoubleEndedIterator;
 
         /// The sign of the integer value.
         /// Note that zero has a positive sign for our purposes.
@@ -54,11 +77,9 @@ mod sealed {
 
         fn abs(self) -> Self;
 
-        fn checked_mul(self, rhs: Self) -> Option<Self>;
-
         fn as_usize(self) -> usize;
 
-        fn from_usize(n: usize) -> Self;
+        fn pow(self, exp: u32) -> Self;
     }
 
     pub enum Sign {
@@ -86,17 +107,48 @@ mod sealed {
         () => {
             const ZERO: Self = 0;
             const ONE: Self = 1;
+            const FIVE: Self = 5;
 
-            fn checked_mul(self, rhs: Self) -> Option<Self> {
-                self.checked_mul(rhs)
+            type BaseTwo = Two;
+            type BaseTen = Ten;
+
+            fn range(from: Self, to: Self) -> impl Iterator<Item = Self> + DoubleEndedIterator {
+                from..to
+            }
+
+            fn range_inclusive(
+                from: Self,
+                to: Self,
+            ) -> impl Iterator<Item = Self> + DoubleEndedIterator {
+                from..=to
             }
 
             fn as_usize(self) -> usize {
                 self as usize
             }
 
-            fn from_usize(n: usize) -> Self {
-                n as Self
+            fn pow(self, exp: u32) -> Self {
+                self.pow(exp)
+            }
+        };
+    }
+
+    macro_rules! impl_bases {
+        ($ty:ty) => {
+            impl Base<$ty> for Two {
+                const VALUE: $ty = 2;
+
+                fn ilog(x: $ty) -> u32 {
+                    x.ilog2()
+                }
+            }
+
+            impl Base<$ty> for Ten {
+                const VALUE: $ty = 10;
+
+                fn ilog(x: $ty) -> u32 {
+                    x.ilog10()
+                }
             }
         };
     }
@@ -119,6 +171,8 @@ mod sealed {
                         self
                     }
                 }
+
+                impl_bases!($ty);
             )+
         };
     }
@@ -145,6 +199,8 @@ mod sealed {
                         self.abs()
                     }
                 }
+
+                impl_bases!($ty);
             )+
         };
     }
