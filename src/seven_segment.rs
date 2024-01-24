@@ -64,14 +64,7 @@ where
 }
 
 fn fmt_seven_segment<T: IntegerImpl, B: Base<T>>(n: T, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-    if n == T::ZERO {
-        write!(f, "{}", DIGITS[0])?;
-    } else {
-        for digit in iter_digits::<_, B>(n) {
-            write!(f, "{}", DIGITS[digit])?;
-        }
-    }
-    Ok(())
+    iter_digits::<_, B>(n).try_for_each(|digit| write!(f, "{}", DIGITS[digit]))
 }
 
 const DIGITS: [&str; 10] = [

@@ -1,5 +1,6 @@
 use crate::integer::{Base, IntegerImpl};
 
+/// Iterates the digits of the given integer. Zero has one digit.
 pub(crate) fn iter_digits<T: IntegerImpl, B: Base<T>>(n: T) -> impl Iterator<Item = usize> {
     let n = n.abs();
     B::powers(n).scan(n, move |remainder, power| {

@@ -142,13 +142,9 @@ fn fmt_number_with_base_and_digits<T: IntegerImpl, B: Base<T>>(
         _ => {}
     };
 
-    if n == T::ZERO {
-        f.write_char(digits[0])
-    } else {
-        iter_digits::<T, B>(n)
-            .map(|digit| digits[digit])
-            .try_for_each(|digit| f.write_char(digit))
-    }
+    iter_digits::<T, B>(n)
+        .map(|digit| digits[digit])
+        .try_for_each(|digit| f.write_char(digit))
 }
 
 #[cfg(test)]
