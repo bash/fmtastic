@@ -71,7 +71,13 @@ mod sealed {
             to: Self,
         ) -> impl Iterator<Item = Self> + DoubleEndedIterator;
 
-        fn sign(self) -> Sign;
+        fn sign(self) -> Sign {
+            if self >= Self::ZERO {
+                Sign::PositiveOrZero
+            } else {
+                Sign::Negative
+            }
+        }
 
         fn abs(self) -> Self;
 
@@ -159,10 +165,6 @@ mod sealed {
                 impl Integer_ for $ty {
                     common_integer_items!();
 
-                    fn sign(self) -> Sign {
-                        Sign::PositiveOrZero
-                    }
-
                     fn abs(self) -> Self {
                         self
                     }
@@ -182,14 +184,6 @@ mod sealed {
 
                 impl Integer_ for $ty {
                     common_integer_items!();
-
-                    fn sign(self) -> Sign {
-                        if self >= 0 {
-                            Sign::PositiveOrZero
-                        } else {
-                            Sign::Negative
-                        }
-                    }
 
                     fn abs(self) -> Self {
                         self.abs()
