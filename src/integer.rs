@@ -83,9 +83,8 @@ mod sealed {
     }
 
     pub enum Sign {
-        None,
         Negative,
-        Positive,
+        PositiveOrZero,
     }
 
     impl Mul for Sign {
@@ -94,11 +93,10 @@ mod sealed {
         fn mul(self, rhs: Self) -> Self::Output {
             use Sign::*;
             match (self, rhs) {
-                (None, _) | (_, None) => None,
-                (Negative, Negative) => Positive,
-                (Negative, Positive) => Negative,
-                (Positive, Negative) => Negative,
-                (Positive, Positive) => Positive,
+                (Negative, Negative) => PositiveOrZero,
+                (Negative, PositiveOrZero) => Negative,
+                (PositiveOrZero, Negative) => Negative,
+                (PositiveOrZero, PositiveOrZero) => PositiveOrZero,
             }
         }
     }
@@ -164,7 +162,7 @@ mod sealed {
                     common_integer_items!();
 
                     fn sign(self) -> Sign {
-                        Sign::None
+                        Sign::PositiveOrZero
                     }
 
                     fn abs(self) -> Self {
@@ -189,7 +187,7 @@ mod sealed {
 
                     fn sign(self) -> Sign {
                         if self >= 0 {
-                            Sign::Positive
+                            Sign::PositiveOrZero
                         } else {
                             Sign::Negative
                         }

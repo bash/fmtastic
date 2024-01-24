@@ -11,8 +11,9 @@ use std::fmt::{self, Write};
 /// By default [single character fractions] are used when possible.
 /// This can be disabled by using the alternate flag (`#`).
 ///
-/// ### Sign: `+` and/or `-`
-/// Use the `+` and/or `-` flag to move the sign to the outside of the fraction.
+/// ### Sign: `+`
+/// Use the `+` flag to move the sign to the outside of the fraction
+/// and to always show the sign, even for positive numbers.
 ///
 /// ## Examples
 /// ```
@@ -23,10 +24,10 @@ use std::fmt::{self, Write};
 /// // Sign in front of fraction
 /// assert_eq!("+¹⁰⁄₃", format!("{:+}", VulgarFraction::new(10, 3)));
 /// assert_eq!("+¹⁰⁄₃", format!("{:+}", VulgarFraction::new(-10, -3)));
-/// assert_eq!("-¹⁰⁄₃", format!("{:-}", VulgarFraction::new(-10, 3)));
-/// assert_eq!("-¹⁰⁄₃", format!("{:-}", VulgarFraction::new(10, -3)));
-/// assert_eq!("-¹⁄₀", format!("{:-}", VulgarFraction::new(-1, 0)));
-/// assert_eq!("-⁰⁄₁", format!("{:-}", VulgarFraction::new(0, -1)));
+/// assert_eq!("-¹⁰⁄₃", format!("{:+}", VulgarFraction::new(-10, 3)));
+/// assert_eq!("-¹⁰⁄₃", format!("{:+}", VulgarFraction::new(10, -3)));
+/// assert_eq!("-¹⁄₀", format!("{:+}", VulgarFraction::new(-1, 0)));
+/// assert_eq!("-⁰⁄₁", format!("{:+}", VulgarFraction::new(0, -1)));
 ///
 /// // No single character fraction
 /// assert_eq!("¹⁄₄", format!("{:#}", VulgarFraction::new(1, 4)));
@@ -100,8 +101,8 @@ where
     T: Integer,
 {
     match numerator.sign() * denominator.sign() {
-        Sign::Positive if f.sign_plus() => (Some('+'), numerator.abs(), denominator.abs()),
-        Sign::Negative if f.sign_minus() => (Some('-'), numerator.abs(), denominator.abs()),
+        Sign::PositiveOrZero if f.sign_plus() => (Some('+'), numerator.abs(), denominator.abs()),
+        Sign::Negative if f.sign_plus() => (Some('-'), numerator.abs(), denominator.abs()),
         _ => (None, numerator, denominator),
     }
 }

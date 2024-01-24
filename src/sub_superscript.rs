@@ -125,7 +125,7 @@ fn fmt_number_with_base_and_digits<T: Integer, B: Base<T>>(
     digits: &[char],
 ) -> fmt::Result {
     match n.sign() {
-        Sign::Positive if f.sign_plus() => f.write_char(plus)?,
+        Sign::PositiveOrZero if f.sign_plus() => f.write_char(plus)?,
         Sign::Negative => f.write_char(minus)?,
         _ => {}
     };
@@ -166,8 +166,10 @@ mod tests {
 
     #[test]
     fn adds_superscript_plus_sign_to_positive_numbers() {
-        assert_eq!("⁺⁰", format!("{:+}", Superscript(0)));
-        assert_eq!("⁺¹²³⁴⁵⁶⁷⁸⁹⁰", format!("{:+}", Superscript(1234567890)));
+        assert_eq!("⁺⁰", format!("{:+}", Superscript(0u64)));
+        assert_eq!("⁺⁰", format!("{:+}", Superscript(0i64)));
+        assert_eq!("⁺¹²³⁴⁵⁶⁷⁸⁹⁰", format!("{:+}", Superscript(1234567890u64)));
+        assert_eq!("⁺¹²³⁴⁵⁶⁷⁸⁹⁰", format!("{:+}", Superscript(1234567890i64)));
         assert_eq!("⁻¹²³⁴⁵⁶⁷⁸⁹⁰", format!("{:+}", Superscript(-1234567890)));
     }
 
