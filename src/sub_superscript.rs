@@ -1,5 +1,5 @@
+use crate::digits::iter_digits;
 use crate::integer::{Base, IntegerImpl, Sign};
-use crate::utils::iter_digits;
 use crate::Integer;
 use std::fmt::{self, Write};
 

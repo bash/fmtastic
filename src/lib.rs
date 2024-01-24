@@ -85,7 +85,7 @@ pub use tally_marks::*;
 mod seven_segment;
 pub use seven_segment::*;
 
-mod utils;
+mod digits;
 
 #[doc = include_str!("../readme.md")]
 #[cfg(doctest)]
