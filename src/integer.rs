@@ -75,7 +75,7 @@ pub(crate) trait Base<I: IntegerImpl>: fmt::Debug {
     fn ilog(x: I) -> u32;
 
     fn powers(x: I) -> impl Iterator<Item = I> {
-        let largest_exp = Self::ilog(x);
+        let largest_exp = if x == I::ZERO { 0 } else { Self::ilog(x) };
         (0..=largest_exp).rev().map(|e| Self::VALUE.pow(e))
     }
 }

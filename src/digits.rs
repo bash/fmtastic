@@ -15,7 +15,6 @@ mod test {
     use crate::integer::IntegerImpl;
 
     #[test]
-    #[should_panic] // TODO: fix this in the implementation
     fn zero_has_zero_as_digits() {
         let digits: Vec<_> = iter_digits::<_, <u32 as IntegerImpl>::BaseTen>(0_u32).collect();
         assert_eq!(vec![0], digits);
@@ -32,5 +31,11 @@ mod test {
     fn iterates_digits_in_base_2() {
         let digits: Vec<_> = iter_digits::<_, <u32 as IntegerImpl>::BaseTwo>(0b10110110).collect();
         assert_eq!(vec![1, 0, 1, 1, 0, 1, 1, 0], digits);
+    }
+
+    #[test]
+    fn iterates_digits_of_negative_number() {
+        let digits: Vec<_> = iter_digits::<_, <u32 as IntegerImpl>::BaseTen>(-1234).collect();
+        assert_eq!(vec![1, 2, 3, 4], digits);
     }
 }
