@@ -48,6 +48,16 @@ assert_eq!("𝍷𝍷𝍷", TallyMarks(3_u32).to_string());
 assert_eq!("𝍸𝍸𝍷𝍷", TallyMarks(12_u32).to_string());
 ```
 
+### Ballot Box
+Formats a boolean as a ballot box.
+
+```rust
+use fmtastic::BallotBox;
+
+assert_eq!("☑ Buy bread", format!("{} Buy bread", BallotBox(true)));
+assert_eq!("☐ Do the dishes", format!("{} Do the dishes", BallotBox(false)));
+```
+
 [Legacy Computing]: https://www.unicode.org/charts/PDF/U1FB00.pdf
 
 ## [Docs](https://docs.rs/fmtastic)

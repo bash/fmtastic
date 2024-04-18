@@ -38,6 +38,15 @@
 //! assert_eq!("𝍷𝍷𝍷", TallyMarks(3_u32).to_string());
 //! assert_eq!("𝍸𝍸𝍷𝍷", TallyMarks(12_u32).to_string());
 //! ```
+//!
+//! # Ballot Box
+//! Formats a boolean as a ballot box.
+//!
+//! ```
+//! # use fmtastic::BallotBox;
+//! assert_eq!("☑ Buy bread", format!("{} Buy bread", BallotBox(true)));
+//! assert_eq!("☐ Do the dishes", format!("{} Do the dishes", BallotBox(false)));
+//! ```
 
 #![forbid(unsafe_code)]
 #![warn(missing_docs)]
@@ -84,6 +93,8 @@ mod tally_marks;
 pub use tally_marks::*;
 mod seven_segment;
 pub use seven_segment::*;
+mod ballot_box;
+pub use ballot_box::*;
 
 mod digits;
 
