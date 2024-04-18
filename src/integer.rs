@@ -19,9 +19,9 @@ where
     type BaseTwo: Base<Self>;
     type BaseTen: Base<Self>;
 
-    fn range(from: Self, to: Self) -> impl Iterator<Item = Self> + DoubleEndedIterator;
+    fn range(from: Self, to: Self) -> impl DoubleEndedIterator<Item = Self>;
 
-    fn range_inclusive(from: Self, to: Self) -> impl Iterator<Item = Self> + DoubleEndedIterator;
+    fn range_inclusive(from: Self, to: Self) -> impl DoubleEndedIterator<Item = Self>;
 
     fn sign(self) -> Sign {
         if self >= Self::ZERO {
@@ -90,14 +90,11 @@ macro_rules! common_integer_items {
         type BaseTwo = Two;
         type BaseTen = Ten;
 
-        fn range(from: Self, to: Self) -> impl Iterator<Item = Self> + DoubleEndedIterator {
+        fn range(from: Self, to: Self) -> impl DoubleEndedIterator<Item = Self> {
             from..to
         }
 
-        fn range_inclusive(
-            from: Self,
-            to: Self,
-        ) -> impl Iterator<Item = Self> + DoubleEndedIterator {
+        fn range_inclusive(from: Self, to: Self) -> impl DoubleEndedIterator<Item = Self> {
             from..=to
         }
 
