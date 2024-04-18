@@ -1,4 +1,4 @@
-use std::fmt;
+use core::fmt;
 
 /// Formats a boolean as either a checked or unchecked ballot box.
 /// ```
