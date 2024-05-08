@@ -11,14 +11,25 @@ env:
 
 jobs:
   build:
-    name: Build and Test
+    name: ${{ matrix.min-rust-version && 'Build (Minimum Rust Version)' || 'Build' }}
+    strategy:
+      matrix:
+        min-rust-version: [true, false]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - name: Use Minimum Rust Version
+      if: matrix.min-rust-version
+      run: ./use-min-rust-version.sh
     - name: Build
       run: cargo build --workspace
     - name: 'Build with #![no_std]'
       run: cargo build --workspace --no-default-features
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
     - name: Run tests
       run: cargo test --workspace
   lint:

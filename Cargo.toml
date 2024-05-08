@@ -11,7 +11,7 @@ repository = "https://github.com/bash/fmtastic"
 homepage = "https://github.com/bash/fmtastic"
 keywords = ["unicode", "formatting", "fraction", "subscript", "superscript"]
 categories = ["value-formatting"]
-exclude = [".github/", ".mailmap", ".gitignore"]
+exclude = [".github/", ".mailmap", ".gitignore", "*.sh"]
 
 [features]
 default = ["std"]
