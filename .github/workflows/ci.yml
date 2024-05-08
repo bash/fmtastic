@@ -16,7 +16,7 @@ jobs:
     outputs:
       rust-version: ${{ steps.rust-version.outputs.rust-version }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Determine Rust Version
         id: rust-version
         run: echo "rust-version=$(./rust-version.sh)" >> "$GITHUB_OUTPUT"
@@ -28,7 +28,7 @@ jobs:
         min-rust-version: [true, false]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Use Minimum Rust Version
       if: matrix.min-rust-version
       run: rustup override set "${{ needs.rust-version.outputs.rust-version }}"
@@ -40,14 +40,14 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Run tests
       run: cargo test --workspace
   lint:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Check Format
       run: cargo fmt --check --all
     - name: Clippy
