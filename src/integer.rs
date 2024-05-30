@@ -21,8 +21,6 @@ where
 
     fn range(from: Self, to: Self) -> impl DoubleEndedIterator<Item = Self>;
 
-    fn range_inclusive(from: Self, to: Self) -> impl DoubleEndedIterator<Item = Self>;
-
     fn sign(self) -> Sign {
         if self >= Self::ZERO {
             Sign::PositiveOrZero
@@ -39,10 +37,6 @@ where
 
     fn into_public(self) -> Self::Public;
 }
-
-pub(crate) trait SignedIntegerImpl: IntegerImpl {}
-
-pub(crate) trait UnsignedIntegerImpl: IntegerImpl {}
 
 pub(crate) enum Sign {
     Negative,
@@ -92,10 +86,6 @@ macro_rules! common_integer_items {
 
         fn range(from: Self, to: Self) -> impl DoubleEndedIterator<Item = Self> {
             from..to
-        }
-
-        fn range_inclusive(from: Self, to: Self) -> impl DoubleEndedIterator<Item = Self> {
-            from..=to
         }
 
         fn as_usize(self) -> usize {
