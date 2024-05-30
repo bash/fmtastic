@@ -10,9 +10,5 @@ readme = "readme.md"
 repository = "https://github.com/bash/fmtastic"
 homepage = "https://github.com/bash/fmtastic"
 keywords = ["unicode", "formatting", "fraction", "subscript", "superscript"]
-categories = ["value-formatting"]
+categories = ["value-formatting", "encoding", "no-std"]
 exclude = [".github/", ".mailmap", ".gitignore", "*.sh"]
-
-[features]
-default = ["std"]
-std = []
