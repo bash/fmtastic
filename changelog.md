@@ -1,4 +1,9 @@
 # Changelog
+## 0.2.1
+* Added support for `#![no_std]`.
+* Added support for 128-bit integers.
+* Added ballot box formatting for booleans.
+
 ## 0.2.0
 * Integers types are now abstracted behind an `Integer` trait.
 * Added support for formatting sub- and superscript as binary.
