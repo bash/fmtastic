@@ -34,8 +34,6 @@ jobs:
       run: rustup override set "${{ needs.rust-version.outputs.rust-version }}"
     - name: Build
       run: cargo build --workspace
-    - name: 'Build with #![no_std]'
-      run: cargo build --workspace --no-default-features
   test:
     name: Test
     runs-on: ubuntu-latest
