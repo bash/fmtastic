@@ -56,6 +56,7 @@ use fmtastic::BallotBox;
 
 assert_eq!("☑ Buy bread", format!("{} Buy bread", BallotBox(true)));
 assert_eq!("☐ Do the dishes", format!("{} Do the dishes", BallotBox(false)));
+assert_eq!("☒ Laundry", format!("{:#} Laundry", BallotBox(true)));
 ```
 
 [Legacy Computing]: https://www.unicode.org/charts/PDF/U1FB00.pdf
