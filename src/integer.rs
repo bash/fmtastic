@@ -158,8 +158,8 @@ macro_rules! impl_signed_integer {
             impl crate::ToIntegerImpl for $ty {
                 type Impl = $ty;
 
-                fn to_impl(&self) -> $ty {
-                    *self
+                fn into_impl(self) -> $ty {
+                    self
                 }
             }
 

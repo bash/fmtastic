@@ -78,7 +78,7 @@ where
 {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let (sign, numerator, denominator) =
-            extract_sign(self.numerator.to_impl(), self.denominator.to_impl(), f);
+            extract_sign(self.numerator.into_impl(), self.denominator.into_impl(), f);
 
         if let Some(sign) = sign {
             f.write_char(sign)?;

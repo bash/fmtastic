@@ -50,7 +50,7 @@ where
     T: UnsignedInteger,
 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        fmt_seven_segment::<_, <T::Impl as IntegerImpl>::BaseTwo>(self.0.to_impl(), f)
+        fmt_seven_segment::<_, <T::Impl as IntegerImpl>::BaseTwo>(self.0.into_impl(), f)
     }
 }
 
@@ -59,7 +59,7 @@ where
     T: UnsignedInteger,
 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        fmt_seven_segment::<_, <T::Impl as IntegerImpl>::BaseTen>(self.0.to_impl(), f)
+        fmt_seven_segment::<_, <T::Impl as IntegerImpl>::BaseTen>(self.0.into_impl(), f)
     }
 }
 

@@ -70,7 +70,7 @@
 /// }
 /// ```
 #[allow(private_bounds)]
-pub trait Integer: ToIntegerImpl {}
+pub trait Integer: ToIntegerImpl + Copy {}
 
 /// Abstraction over signed integer types.
 pub trait SignedInteger: Integer {}
@@ -82,7 +82,7 @@ pub trait UnsignedInteger: Integer {}
 pub(crate) trait ToIntegerImpl {
     type Impl: crate::integer::IntegerImpl<Public = Self>;
 
-    fn to_impl(&self) -> Self::Impl;
+    fn into_impl(self) -> Self::Impl;
 }
 
 mod sub_superscript;

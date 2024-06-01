@@ -43,7 +43,7 @@ where
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         fmt_number_with_base_and_digits::<_, <T::Impl as IntegerImpl>::BaseTen>(
             f,
-            self.0.to_impl(),
+            self.0.into_impl(),
             '⁺',
             '⁻',
             &['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹'],
@@ -58,7 +58,7 @@ where
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         fmt_number_with_base_and_digits::<_, <T::Impl as IntegerImpl>::BaseTwo>(
             f,
-            self.0.to_impl(),
+            self.0.into_impl(),
             '⁺',
             '⁻',
             &['⁰', '¹'],
@@ -106,7 +106,7 @@ where
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         fmt_number_with_base_and_digits::<_, <T::Impl as IntegerImpl>::BaseTen>(
             f,
-            self.0.to_impl(),
+            self.0.into_impl(),
             '₊',
             '₋',
             &['₀', '₁', '₂', '₃', '₄', '₅', '₆', '₇', '₈', '₉'],
@@ -121,7 +121,7 @@ where
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         fmt_number_with_base_and_digits::<_, <T::Impl as IntegerImpl>::BaseTwo>(
             f,
-            self.0.to_impl(),
+            self.0.into_impl(),
             '₊',
             '₋',
             &['₀', '₁'],

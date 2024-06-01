@@ -38,7 +38,7 @@ where
     T: UnsignedInteger,
 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        fmt_tally_marks(self.0.to_impl(), f)
+        fmt_tally_marks(self.0.into_impl(), f)
     }
 }
 
