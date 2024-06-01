@@ -1,6 +1,6 @@
 use core::fmt;
-use core::ops::Mul;
 use core::ops::{Div, Rem, Sub};
+use core::ops::{Mul, SubAssign};
 
 pub(crate) trait IntegerImpl
 where
@@ -8,8 +8,10 @@ where
     Self: Div<Self, Output = Self>,
     Self: Rem<Self, Output = Self>,
     Self: TryInto<u8>,
+    Self: TryFrom<u16>,
     Self: PartialOrd<Self>,
     Self: Sub<Self, Output = Self>,
+    Self: SubAssign<Self>,
 {
     const ZERO: Self;
     const ONE: Self;
@@ -37,6 +39,9 @@ where
 
     fn into_public(self) -> Self::Public;
 }
+
+#[allow(dead_code)] // This is clearly used dear compiler
+pub(crate) trait UnsignedIntegerImpl: IntegerImpl + crate::roman::RomanInteger {}
 
 pub(crate) enum Sign {
     Negative,
@@ -131,10 +136,16 @@ macro_rules! impl_unsigned_integer {
             impl crate::ToIntegerImpl for $ty {
                 type Impl = $ty;
 
-                fn to_impl(&self) -> $ty {
-                    *self
+                fn into_impl(self) -> $ty {
+                    self
                 }
             }
+
+            impl crate::ToUnsignedIntegerImpl for $ty {
+                type UnsignedImpl = $ty;
+            }
+
+            impl UnsignedIntegerImpl for $ty {}
 
             impl IntegerImpl for $ty {
                 common_integer_items!($ty);

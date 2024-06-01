@@ -3,7 +3,7 @@
 //!
 //! # [Vulgar Fractions]
 //! Creates beautiful unicode fractions like ¼ or ¹⁰⁄₃.
-//! ```rust
+//! ```
 //! # use fmtastic::VulgarFraction;
 //! assert_eq!("¹⁰⁄₃", format!("{}", VulgarFraction::new(10, 3)));
 //! assert_eq!("¼", format!("{}", VulgarFraction::new(1, 4)));
@@ -12,10 +12,21 @@
 //! # Sub- and superscript
 //! Formats integers as sub- or superscript.
 //!
-//! ```rust
+//! ```
 //! # use fmtastic::{Subscript, Superscript};
 //! assert_eq!("x₁", format!("x{}", Subscript(1)));
 //! assert_eq!("n²", format!("n{}", Superscript(2)));
+//! ```
+//!
+//! # Roman Numerals
+//! Formats unsigned integers as Roman numerals.
+//!
+//! ```
+//! # use fmtastic::Roman;
+//! assert_eq!("ⅾⅽⅽⅼⅹⅹⅹⅰⅹ", format!("{:#}", Roman::new(789_u16).unwrap())); // lowercase
+//! assert_eq!("ⅯⅯⅩⅩⅠⅤ", format!("{}", Roman::new(2024_u16).unwrap()));
+//! assert_eq!("MMXXIV", format!("{}", Roman::new(2024_u16).unwrap().ascii())); // ascii
+//! assert_eq!("ⅠⅠⅠ", format!("{}", Roman::from(3_u8))); // u8's can always be formatted as Roman numeral
 //! ```
 //!
 //! [Vulgar Fractions]: https://en.wikipedia.org/wiki/Fraction_(mathematics)#Simple,_common,_or_vulgar_fractions
@@ -77,12 +88,17 @@ pub trait SignedInteger: Integer {}
 
 /// Abstraction over unsigned integer types.
 /// Unsigned integers can be formatted as [`Segmented`] or [`TallyMarks`].
-pub trait UnsignedInteger: Integer {}
+#[allow(private_bounds)]
+pub trait UnsignedInteger: Integer + ToUnsignedIntegerImpl {}
 
 pub(crate) trait ToIntegerImpl {
     type Impl: crate::integer::IntegerImpl<Public = Self>;
 
     fn into_impl(self) -> Self::Impl;
+}
+
+pub(crate) trait ToUnsignedIntegerImpl: ToIntegerImpl<Impl = Self::UnsignedImpl> {
+    type UnsignedImpl: integer::UnsignedIntegerImpl<Public = Self>;
 }
 
 mod sub_superscript;
@@ -96,6 +112,8 @@ mod seven_segment;
 pub use seven_segment::*;
 mod ballot_box;
 pub use ballot_box::*;
+mod roman;
+pub use roman::*;
 
 mod digits;
 

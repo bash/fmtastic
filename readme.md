@@ -29,6 +29,18 @@ assert_eq!("x₁", format!("x{}", Subscript(1)));
 assert_eq!("n²", format!("n{}", Superscript(2)));
 ```
 
+### Roman Numerals
+Formats unsigned integers as Roman numerals.
+
+```rust
+use fmtastic::Roman;
+
+assert_eq!("ⅾⅽⅽⅼⅹⅹⅹⅰⅹ", format!("{:#}", Roman::new(789_u16).unwrap())); // lowercase
+assert_eq!("ⅯⅯⅩⅩⅠⅤ", format!("{}", Roman::new(2024_u16).unwrap()));
+assert_eq!("MMXXIV", format!("{}", Roman::new(2024_u16).unwrap().ascii())); // ascii
+assert_eq!("ⅠⅠⅠ", format!("{}", Roman::from(3_u8))); // u8's can always be formatted as Roman numeral
+```
+
 ### Seven-Segment Digits
 Formats an unsigned integer using seven-segment digits
 from the [Legacy Computing] block.
