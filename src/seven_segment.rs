@@ -6,12 +6,13 @@ use core::fmt;
 /// Formats an unsigned integer using seven-segment digits
 /// from the [Legacy Computing] block.
 ///
-/// You may need to install an extra font such as [Sieben 7] or [Noto Sans Symbols 2]
+/// You may need to install an extra font such as [Sieben 7], [Cascadia Code], or [Noto Sans Symbols 2]
 /// since most other fonts do not support these digits.
 ///
 /// [Legacy Computing]: https://www.unicode.org/charts/PDF/U1FB00.pdf
 /// [Sieben 7]: https://github.com/bash/sieben-7
 /// [Noto Sans Symbols 2]: https://fonts.google.com/noto/specimen/Noto+Sans+Symbols+2
+/// [Cascadia Code]: https://github.com/microsoft/cascadia-code
 ///
 /// ```
 /// use fmtastic::Segmented;

@@ -41,6 +41,17 @@
 //!
 //! [Legacy Computing]: https://www.unicode.org/charts/PDF/U1FB00.pdf
 //!
+//! # Outlined
+//! Formats an unsigned integer using outlined digits
+//! from the [Legacy Computing Supplement] block.
+//!
+//! ```
+//! # use fmtastic::Outlined;
+//! assert_eq!("𜳶𜳲𜳸", format!("{}", Outlined(628_u32)));
+//! ```
+//!
+//! [Legacy Computing Supplement]: https://www.unicode.org/charts/PDF/U1CC00.pdf
+//!
 //! # Tally Marks
 //! Formats an unsigned integer as tally marks.
 //!
@@ -114,6 +125,8 @@ mod ballot_box;
 pub use ballot_box::*;
 mod roman;
 pub use roman::*;
+mod outlined;
+pub use outlined::*;
 
 mod digits;
 

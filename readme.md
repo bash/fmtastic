@@ -20,7 +20,7 @@ assert_eq!("¼", format!("{}", VulgarFraction::new(1, 4)));
 ```
 
 ### Sub- and superscript
-Formats integers as sub- or superscript. 
+Formats integers as sub- or superscript.
 
 ```rust
 use fmtastic::{Subscript, Superscript};
@@ -51,6 +51,16 @@ use fmtastic::Segmented;
 assert_eq!("🯶🯲🯸", format!("{}", Segmented(628_u32)));
 ```
 
+### Outlined
+Formats an unsigned integer using outlined digits
+from the [Legacy Computing Supplement] block.
+
+```rust
+use fmtastic::Outlined;
+
+assert_eq!("𜳶𜳲𜳸", format!("{}", Outlined(628_u32)));
+```
+
 ### Tally Marks
 Formats an unsigned integer as tally marks.
 ```rust
@@ -70,8 +80,6 @@ assert_eq!("☑ Buy bread", format!("{} Buy bread", BallotBox(true)));
 assert_eq!("☐ Do the dishes", format!("{} Do the dishes", BallotBox(false)));
 assert_eq!("☒ Laundry", format!("{:#} Laundry", BallotBox(true)));
 ```
-
-[Legacy Computing]: https://www.unicode.org/charts/PDF/U1FB00.pdf
 
 ## [Docs](https://docs.rs/fmtastic)
 
@@ -93,5 +101,7 @@ for inclusion in the work by you, as defined in the Apache-2.0 license, shall be
 multi-licensed as above, without any additional terms or conditions.
 
 
+[Legacy Computing]: https://www.unicode.org/charts/PDF/U1FB00.pdf
+[Legacy Computing Supplement]: https://www.unicode.org/charts/PDF/U1CC00.pdf
 [Vulgar Fractions]: https://en.wikipedia.org/wiki/Fraction_(mathematics)#Simple,_common,_or_vulgar_fractions
 [`Display`]: https://doc.rust-lang.org/std/fmt/trait.Display.html

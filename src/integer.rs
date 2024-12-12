@@ -20,6 +20,7 @@ where
     type Public: crate::Integer;
     type BaseTwo: Base<Self>;
     type BaseTen: Base<Self>;
+    type BaseSixteen: Base<Self>;
 
     fn range(from: Self, to: Self) -> impl DoubleEndedIterator<Item = Self>;
 
@@ -68,6 +69,9 @@ pub(crate) struct Ten;
 #[derive(Debug)]
 pub(crate) struct Two;
 
+#[derive(Debug)]
+pub(crate) struct Sixteen;
+
 pub(crate) trait Base<I: IntegerImpl>: fmt::Debug {
     const VALUE: I;
 
@@ -88,6 +92,7 @@ macro_rules! common_integer_items {
         type Public = $ty;
         type BaseTwo = Two;
         type BaseTen = Ten;
+        type BaseSixteen = Sixteen;
 
         fn range(from: Self, to: Self) -> impl DoubleEndedIterator<Item = Self> {
             from..to
@@ -122,6 +127,14 @@ macro_rules! impl_bases {
 
             fn ilog(x: $ty) -> u32 {
                 x.ilog10()
+            }
+        }
+
+        impl Base<$ty> for Sixteen {
+            const VALUE: $ty = 16;
+
+            fn ilog(x: $ty) -> u32 {
+                x.ilog(Self::VALUE)
             }
         }
     };
